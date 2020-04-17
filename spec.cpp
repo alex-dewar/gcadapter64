@@ -53,14 +53,14 @@ static void startGCApp()
 
 EXPORT void CALL CloseDLL(void)
 {
-    GCAdapter::SetAdapterCallback(nullptr);
-    GCAdapter::Shutdown();
+    //GCAdapter::SetAdapterCallback(nullptr);
+    //GCAdapter::Shutdown();
 
-    if (gc)
+    /*if (gc)
     {
         delete gc;
         gc = nullptr;
-    }
+    }*/
 }
 
 EXPORT void CALL ControllerCommand(int Control, uint8_t* Command)
@@ -238,3 +238,29 @@ EXPORT void CALL ReadController(int Control, uint8_t* Command)
 EXPORT void CALL RomClosed(void) {}
 
 EXPORT void CALL RomOpen(void) {}
+
+/******************************************************************
+  Function: WM_KeyDown
+  Purpose:  To pass the WM_KeyDown message from the emulator to the 
+            plugin.
+  input:    wParam and lParam of the WM_KEYDOWN message.
+  output:   none
+*******************************************************************/ 
+EXPORT void CALL WM_KeyDown(uint32_t wParam, uint32_t lParam)
+{
+	return;
+}
+
+/******************************************************************
+  Function: WM_KeyUp
+  Purpose:  To pass the WM_KEYUP message from the emulator to the 
+            plugin.
+  input:    wParam and lParam of the WM_KEYDOWN message.
+  output:   none
+*******************************************************************/ 
+EXPORT void CALL WM_KeyUp(uint32_t wParam, uint32_t lParam)
+{
+	return;
+}
+
+
