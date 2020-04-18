@@ -117,10 +117,12 @@ EXPORT void CALL GetKeys(int32_t Control, BUTTONS* Keys)
     Keys->D_DPAD       = (gcpad.button & PAD_BUTTON_DOWN) != 0;
     Keys->Z_TRIG       = (gcpad.button & PAD_TRIGGER_Z) != 0;
     Keys->R_TRIG       = (gcpad.button & PAD_TRIGGER_R) != 0;
+    Keys->L_TRIG       = (gcpad.button & PAD_TRIGGER_L) != 0;
 
     if (GCAdapter::controller_status[Control].l_as_z)
     {
-        Keys->Z_TRIG = Keys->Z_TRIG | ((gcpad.button & PAD_TRIGGER_L) != 0);
+        Keys->Z_TRIG = ((gcpad.button & PAD_TRIGGER_L) != 0);
+        Keys->L_TRIG = (gcpad.button & PAD_TRIGGER_Z) != 0;
     }
     else
     {
@@ -149,6 +151,10 @@ EXPORT void CALL GetKeys(int32_t Control, BUTTONS* Keys)
 EXPORT void CALL InitiateControllers(CONTROL_INFO ControlInfo)
 {
     GCAdapter::Init();
+    GCAdapter::controller_status[0].enabled = 1;
+    GCAdapter::controller_status[0].enabled = 1;
+
+    GCAdapter::controller_status[0].l_as_z = 1;
 
     for (uint32_t i = 0; i < 4; i++)
     {
@@ -192,16 +198,18 @@ EXPORT void CALL ReadController(int Control, uint8_t* Command)
             pad.U_DPAD       = (gcpad.button & PAD_BUTTON_UP) != 0;
             pad.R_DPAD       = (gcpad.button & PAD_BUTTON_RIGHT) != 0;
             pad.D_DPAD       = (gcpad.button & PAD_BUTTON_DOWN) != 0;
-            pad.Z_TRIG       = (gcpad.button & PAD_TRIGGER_Z) != 0;
+            
             pad.R_TRIG       = (gcpad.button & PAD_TRIGGER_R) != 0;
 
             if (GCAdapter::controller_status[Control].l_as_z)
             {
-                pad.Z_TRIG = pad.Z_TRIG | ((gcpad.button & PAD_TRIGGER_L) != 0);
+                pad.Z_TRIG = ((gcpad.button & PAD_TRIGGER_L) != 0);
+                pad.L_TRIG = ((gcpad.button & PAD_TRIGGER_Z) != 0);
             }
             else
             {
                 pad.L_TRIG = (gcpad.button & PAD_TRIGGER_L) != 0;
+                pad.Z_TRIG = (gcpad.button & PAD_TRIGGER_Z) != 0;
             }
 
             pad.Y_AXIS = (int8_t) gcpad.stickX - GCAdapter::controller_status[Control].origin.sX;
@@ -237,7 +245,9 @@ EXPORT void CALL ReadController(int Control, uint8_t* Command)
 
 EXPORT void CALL RomClosed(void) {}
 
-EXPORT void CALL RomOpen(void) {}
+EXPORT void CALL RomOpen(void)
+{
+}
 
 /******************************************************************
   Function: WM_KeyDown
